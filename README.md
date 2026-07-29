@@ -2,7 +2,7 @@
 
 > 发一个抖音/B站/小红书/YouTube/Twitter/网页链接，AI 自动爬取 → 分析总结 → 存入 Obsidian → FNS 同步到所有设备。
 
-![工作流](docs/sync-workflow.svg)
+link-vault/sync-workflow.svg
 
 ---
 
