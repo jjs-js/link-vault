@@ -2,7 +2,29 @@
 
 > 发一个抖音/B站/小红书/YouTube/Twitter/网页链接，AI 自动爬取 → 分析总结 → 存入 Obsidian → FNS 同步到所有设备。
 
-link-vault/sync-workflow.svg
+```mermaid
+flowchart TD
+    A["🔗 多平台链接"] --> B["🌐 URL 解析"]
+
+    B --> C1["douyin-mcp<br/>🎵 抖音"]
+    B --> C2["agent-reach<br/>📺 B站 · 📕 小红书 · ▶️ YouTube<br/>🐦 X · 🌍 通用网页 · 更多"]
+
+    C1 --> D["🤖 AI 分析与总结<br/>摘要 · 观点 · 原文 · 思考区"]
+    C2 --> D
+
+    D --> E["📝 写入 Obsidian Vault<br/>调用 Obsidian CLI 管理笔记仓库"]
+
+    E --> F["🔄 FNS 同步服务<br/>WebSocket 实时推送"]
+
+    F --> G["🖥️ Windows Obsidian"]
+    F --> H["📱 Android Obsidian"]
+
+    style A fill:#3b82f6,color:#fff
+    style C1 fill:#ec4899,color:#fff
+    style C2 fill:#8b5cf6,color:#fff
+    style D fill:#f59e0b,color:#fff
+    style F fill:#10b981,color:#fff
+```
 
 ---
 
