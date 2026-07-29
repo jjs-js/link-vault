@@ -36,7 +36,7 @@ flowchart TD
 |   | **Obsidian Fast Note Sync 插件** | Obsidian 客户端同步插件 | [haierkeys/obsidian-fast-note-sync](https://github.com/haierkeys/obsidian-fast-note-sync) |
 | 2 | **agent-reach** | 多平台内容爬取路由（15 平台：B站/小红书/Twitter/YouTube/V2EX 等） | [Panniantong/Agent-Reach](https://github.com/Panniantong/Agent-Reach) |
 | 3 | **douyin-mcp** | 抖音视频下载 + AI 语音转文字（SiliconFlow SenseVoice） | [yzfly/douyin-mcp-server](https://github.com/yzfly/douyin-mcp-server) |
-| 4 | **Obsidian Skills**（obsidian-cli / obsidian-markdown / obsidian-bases） | Agent 操控 Obsidian：笔记读写、Obsidian 风格 Markdown、.base 数据库视图 | 
+| 4 | **Obsidian Skills**（obsidian-cli / obsidian-markdown / obsidian-bases） | Agent 操控 Obsidian：笔记读写、Obsidian 风格 Markdown、.base 数据库视图 | [kepano/obsidian-skills](https://github.com/kepano/obsidian-skills) |
 ---
 
 ## 安装与使用
@@ -66,6 +66,8 @@ flowchart TD
 Agent 通过 obsidian-cli 读写笔记、管理仓库。agent 内置，无需额外安装。
 
 > 需要 Obsidian 正在运行。
+
+🔗 [kepano/obsidian-skills](https://github.com/kepano/obsidian-skills)
 
 ### 4. link-vault — 链接收纳 Skill
 
