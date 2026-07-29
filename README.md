@@ -36,68 +36,67 @@ flowchart TD
 |   | **Obsidian Fast Note Sync 插件** | Obsidian 客户端同步插件 | [haierkeys/obsidian-fast-note-sync](https://github.com/haierkeys/obsidian-fast-note-sync) |
 | 2 | **agent-reach** | 多平台内容爬取路由（15 平台：B站/小红书/Twitter/YouTube/V2EX 等） | [Panniantong/Agent-Reach](https://github.com/Panniantong/Agent-Reach) |
 | 3 | **douyin-mcp** | 抖音视频下载 + AI 语音转文字（SiliconFlow SenseVoice） | [yzfly/douyin-mcp-server](https://github.com/yzfly/douyin-mcp-server) |
-| 4 | **Obsidian Skills**（obsidian-cli / obsidian-markdown / obsidian-bases） | Agent 操控 Obsidian：笔记读写、Obsidian 风格 Markdown、.base 数据库视图 | Reasonix 内置 |
-| — | **opencli** | Chrome 浏览器桥接，爬取需登录的网站 | [jackwener/opencli](https://github.com/jackwener/opencli) |
-| — | **bili-cli** | B站视频信息 + 字幕 | [jackwener/bilibili-cli](https://github.com/jackwener/bilibili-cli) |
-| — | **twitter-cli** | Twitter/X 推文获取 | [jackwener/twitter-cli](https://github.com/jackwener/twitter-cli) |
-| — | **yt-dlp** | YouTube 字幕下载 | [yt-dlp/yt-dlp](https://github.com/yt-dlp/yt-dlp) |
-| — | **Jina Reader** | 通用网页内容提取 | [r.jina.ai](https://r.jina.ai) |
-
+| 4 | **Obsidian Skills**（obsidian-cli / obsidian-markdown / obsidian-bases） | Agent 操控 Obsidian：笔记读写、Obsidian 风格 Markdown、.base 数据库视图 | 
 ---
 
-## 架构
+## 安装与使用
 
-```mermaid
-flowchart TD
-    A["🔗 /sync <链接>"] --> B["🌐 URL 解析\n识别平台"]
-    
-    B -->|douyin.com| C1["🎵 抖音\n douyin-mcp\n视频信息 + ASR 转文字"]
-    B -->|bilibili.com| C2["📺 B站\n opencli subtitle\n+ bili-cli 视频信息"]
-    B -->|xiaohongshu.com| C3["📕 小红书\n opencli xiaohongshu"]
-    B -->|youtube.com| C4["▶️ YouTube\n yt-dlp 字幕"]
-    B -->|x.com / twitter.com| C5["🐦 X/Twitter\n twitter-cli"]
-    B -->|其他 URL| C6["🌍 通用网页\n Jina Reader"]
+按顺序安装以下组件：
 
-    C1 --> D["🤖 AI 分析\n摘要 + 关键观点\n+ 原始内容 + 思考区"]
-    C2 --> D
-    C3 --> D
-    C4 --> D
-    C5 --> D
-    C6 --> D
+### 1. agent-reach — 多平台爬取
 
-    D --> E["📝 写入 Obsidian\nbash heredoc\n→ vault/平台/日期 标题.md"]
-    
-    E --> F["🔄 FNS 同步\n自动检测变更\nWebSocket 实时推送"]
-    
-    F --> G["🖥️ Windows Obsidian"]
-    F --> H["📱 Android Obsidian"]
+全平台内容获取路由，覆盖 B站、小红书、YouTube、Twitter/X、通用网页等。内部已集成 opencli、bili-cli、twitter-cli、yt-dlp、Jina Reader 等工具。
 
-    style A fill:#4a9eff,color:#fff
-    style D fill:#f0a030,color:#fff
-    style F fill:#30b060,color:#fff
-    style G fill:#666,color:#fff
-    style H fill:#666,color:#fff
+> 安装后运行 `agent-reach doctor --json` 检查各平台后端状态。浏览需登录的网站（B站/小红书等）还需安装 [OpenCLI Chrome 扩展](https://github.com/jackwener/opencli/releases)，并在 Chrome 中保持登录。
+
+🔗 [Panniantong/Agent-Reach](https://github.com/Panniantong/Agent-Reach)
+
+### 2. douyin-mcp — 抖音视频提取
+
+抖音视频信息获取 + AI 语音转文字（SiliconFlow SenseVoice / 阿里云百炼）。
+
+> ⚠️ `mcp` 必须锁定 **1.20.0** 版本（2.0 删了 FastMCP 模块），建议用本地 venv 直连，不要通过 `uvx`。
+
+需配置环境变量 `DASHSCOPE_API_KEY` 或 `API_KEY`。
+
+🔗 [yzfly/douyin-mcp-server](https://github.com/yzfly/douyin-mcp-server)
+
+### 3. Obsidian Skills — 操控 Obsidian
+
+Agent 通过 obsidian-cli 读写笔记、管理仓库。agent 内置，无需额外安装。
+
+> 需要 Obsidian 正在运行。
+
+### 4. link-vault — 链接收纳 Skill
+
+将本项目 `skill/SKILL.md` 安装到 agent。
+
+🔗 本项目
+
+### 5. FNS — 多端同步
+
+**服务端**：下载 [Release](https://github.com/haierkeys/fast-note-sync-service/releases) 直接运行：
+```bash
+./fast-note-sync-service.exe run -c config/config.yaml
 ```
 
-## 前置条件
+**Obsidian 插件**：社区插件市场搜索 `Fast Note Sync`。
 
-| 条件 | 说明 |
-|------|------|
-| **Chrome 打开** | opencli 通过浏览器桥接爬取，需 Chrome 在运行 |
-| **B站 / 小红书等平台已登录 Chrome** | opencli 复用浏览器登录态 |
-| **OpenCLI 扩展已启用** | Chrome → 扩展程序 → OpenCLI 确认已开启 |
-| **FNS 服务运行** | `localhost:9000`，服务端自动检测文件变更并同步 |
-| **DASHSCOPE_API_KEY** | 环境变量，抖音 ASR 需要（SiliconFlow / 阿里云百炼） |
-| **Obsidian 打开** | 推荐，便于实时查看笔记（非必须） |
+**MCP Token**：⚠️ 必须手动新建 Token，Scope 留空（GUI 的「Copy API Config」不含 MCP 权限）。
 
-## 使用方法
+> Android 端注意：热点网段隔离 + 防火墙放行 9000 端口。代理软件（Clash 等）可能干扰 WebSocket。
+
+🔗 服务端 [haierkeys/fast-note-sync-service](https://github.com/haierkeys/fast-note-sync-service) · 插件 [haierkeys/obsidian-fast-note-sync](https://github.com/haierkeys/obsidian-fast-note-sync)
+
+### 开始使用
 
 ```
-/multi-platform-obsidian-sync https://www.bilibili.com/video/BV1eZgt6YEP5
-/multi-platform-obsidian-sync https://v.douyin.com/xxx
-/multi-platform-obsidian-sync https://www.xiaohongshu.com/explore/xxx
-/multi-platform-obsidian-sync https://x.com/xxx/status/123456
+/link-vault <链接>
 ```
+
+支持：抖音、B站、小红书、YouTube、Twitter/X、以及任意网页链接。
+
+AI 自动识别平台、爬取、分析、写入 Obsidian，FNS 实时同步到所有设备。
 
 ## 笔记格式
 
@@ -168,7 +167,7 @@ tags:
 | `Scope restricted: Permission denied: /api/mcp` | Web GUI "Copy API Config" 生成的 Token 默认 Scope 只含 `p:rest`，不含 `p:mcp` | 手动创建 Token，**Scope 留空**（空 = 全权限 `p:* c:* f:*`） |
 | 换了 Scope 留空的 Token 仍报 Scope Restricted | 第一次点的仍是 "Copy API Config" 而非手动新建，Token 没换 | 去 Token 管理页面真正新建一个空 Scope 的 Token |
 | 换了第三个 Token 成功 | Token ID 从 6→7→8，第三个才是真正空 Scope | — |
-| FNS MCP SSE 间歇性 `unexpected EOF` | 推测 Reasonix MCP 客户端 SSE 长连接断开 | **不影响同步**：FNS 服务端自动检测文件变更并同步，不依赖 MCP 调用触发 |
+| FNS MCP SSE 间歇性 `unexpected EOF` | 推测 agent MCP 客户端 SSE 长连接断开 | **不影响同步**：FNS 服务端自动检测文件变更并同步，不依赖 MCP 调用触发 |
 
 > **关键认知**：FNS 权限是三维的（协议 `p:` / 客户端 `c:` / 功能 `f:`），`p:rest` 的 Token 无法访问 MCP 端点。空 Scope = 全权限。FNS 的同步不依赖 MCP 调用——文件写入本地后服务端自动检测变更。
 
@@ -206,14 +205,14 @@ tags:
 | 困难 | 根因 | 解决 |
 |------|------|------|
 | `obsidian vault="1" create content="长内容..."` 报 exit 127 | 长内容含 `---`（YAML 分隔符）、`$`、引号等特殊字符，shell 解析异常 | **弃用 obsidian-cli 写笔记** |
-| `write_file` 报 sandbox 限制 | Reasonix 的 write_file 工具只允许写工作区内文件，vault 路径在外部 | **用 `bash cat >` heredoc 写文件** |
+| `write_file` 报 sandbox 限制 | agent 的 write_file 工具只允许写工作区内文件，vault 路径在外部 | **用 `bash cat >` heredoc 写文件** |
 | heredoc 中 `$` 被 shell 展开 | 未用单引号分隔符 | 必须用 `<< 'ENDOFFILE'`（单引号防变量展开） |
 
 > **关键认知**：obsidian-cli 适合简短的元数据操作（move/search/property），不适合写完整笔记。写笔记统一用 bash heredoc + 单引号分隔符。
 
 ---
 
-### 七、FNS MCP 间歇性 EOF（Reasonix 客户端）
+### 七、FNS MCP 间歇性 EOF（agent 客户端）
 
 `read SSE: unexpected EOF` 间歇性出现（重试后通常恢复），不影响 FNS 服务端同步。FNS 通过 WebSocket 协议实时同步，服务端自动检测本地文件变更。
 
