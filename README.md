@@ -1,6 +1,7 @@
 # 链接收纳 (link-vault)
 
 > 发一个抖音/B站/小红书/YouTube/Twitter/网页链接，AI 自动爬取 → 分析总结 → 存入 Obsidian → FNS 同步到所有设备。
+> 本仓库的 Skill 已按 [Agent Skills 开放标准](https://agentskills.io) 规范化，并通过官方 skills-ref 校验。
 
 ```mermaid
 flowchart TD
@@ -71,7 +72,7 @@ Agent 通过 obsidian-cli 读写笔记、管理仓库。agent 内置，无需额
 
 ### 4. link-vault — 链接收纳 Skill
 
-将本项目 `skill/SKILL.md` 安装到 agent。
+将本项目 `link-vault/` 文件夹整体安装到 agent 的 skills 目录（内含 `SKILL.md`、`references/`、`assets/`）。
 
 🔗 本项目
 
